@@ -33,7 +33,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 export default {
   data() {
     return {
@@ -70,7 +69,7 @@ export default {
   },
   methods: {
     async onSubmit() {
-      const res = await axios.post('http://localhost:3000/register', {
+      const res = await this.axios.post('/register', {
         username: this.username,
         password: this.password,
         nickname: this.nickname

@@ -17,21 +17,26 @@
       />
       <div class="btn"></div>
       <div style="margin: 16px;">
-        <van-button round block type="info" native-type="submit"
+        <van-button
+          round
+          block
+          type="info"
+          native-type="submit"
+          style="background-color:red"
           >登录</van-button
         >
       </div>
     </van-form>
     <div>
       <p class="tips">
-        没有账号?<router-link to="/user">立即注册吧</router-link>
+        没有账号?
+        <router-link to="/user">立即注册吧</router-link>
       </p>
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
 export default {
   data() {
     return {
@@ -58,20 +63,24 @@ export default {
     }
   },
   created() {
-    console.log(this.$route)
+    /* this.$route.params 获取路由传过来的参数 */
     this.username = this.$route.params.username
     this.password = this.$route.params.password
   },
   methods: {
     async onSubmit() {
-      const res = await axios.post('http://localhost:3000/login', {
+      const res = await this.axios.post('/login', {
         username: this.username,
         password: this.password
       })
+
       if (res.data.statusCode === 200) {
         this.$toast.success(res.data.message)
         localStorage.setItem('token', res.data.data.token)
-        this.$router.push('/')
+        /* 存储登录的项个人的详情的id */
+        localStorage.setItem('userId', res.data.data.user.id)
+        /* 登录成功跳转到个人中心 */
+        this.$router.push('/regiset')
       } else {
         this.$toast.success(res.data.message)
       }

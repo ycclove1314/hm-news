@@ -3,6 +3,9 @@ import App from './App.vue'
 import router from './router/index'
 import Myheader from './components/hmheader.vue'
 import Mylogin from './components/hmlogin.vue'
+import MyUser from './components/hmUser.vue'
+import axios from 'axios'
+import moment from 'moment'
 import './less/iconfont.less'
 import './less/base.less'
 /* 导入amfe-flexible 适配rem插件 */
@@ -16,9 +19,42 @@ Vue.use(Button)
 Vue.use(Field)
 Vue.use(Form)
 Vue.use(Toast)
+/* 把axios 挂载到Vue的原型上 */
+Vue.prototype.axios = axios
+/* 设置默认的基地址 */
+axios.defaults.baseURL = 'http://localhost:3000'
+// 添加请求拦截器
+axios.interceptors.request.use(function(config) {
+  /* 在发送请求之前 给每次请求设置token config是所有请求之前的信息 */
+  const token = localStorage.getItem('token')
+  if (token) {
+    config.headers.Authorization = token
+  }
+  return config
+})
+// 添加响应拦截器
+axios.interceptors.response.use(function(res) {
+  // 如果响应回来的数据状态码是401 且message是状态信息是"用户信息验证失败"就证明没有设置token和是假的token就返回登录页
+  if (res.data.statusCode === 401 && res.data.message === '用户信息验证失败') {
+    router.push('/login')
+    /* 提示用户信息验证失败 */
+    Toast.fail(res.data.message)
+    /* 删除本地的过期或虚假token */
+    localStorage.removeItem('token')
+    /* 删除本地的id */
+    localStorage.removeItem('userId')
+  }
+  return res
+})
+
 /* 公共头部组件 */
 Vue.component('my-header', Myheader)
 Vue.component('my-login', Mylogin)
+Vue.component('my-user', MyUser)
+/* 使用过滤器 */
+Vue.filter('filter', function(input) {
+  return moment(input).format('YYYY-MM-DD')
+})
 new Vue({
   render: h => h(App),
   router
