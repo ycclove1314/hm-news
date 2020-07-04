@@ -1,7 +1,7 @@
 <template>
   <div class="user">
     <div class="header">
-      <div class="left">
+      <div class="left" @click="$router.push('/emit')">
         <img :src="axios.defaults.baseURL + info.head_img" alt />
       </div>
       <div class="content">
@@ -10,7 +10,7 @@
         <span class="span1">{{ info.nickname }}</span>
         <p>{{ info.create_date | filter }}</p>
       </div>
-      <div class="right">
+      <div class="right" @click="$router.go(1)">
         <span class="iconfont iconjiantou1"></span>
       </div>
     </div>
