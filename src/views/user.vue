@@ -5,10 +5,7 @@
         <img :src="axios.defaults.baseURL + info.head_img" alt />
       </div>
       <div class="content">
-        <span
-          class="iconfont iconxingbienv span3"
-          v-if="info.gender === 0"
-        ></span>
+        <span class="iconfont iconxingbienv span3" v-if="info.gender === 0"></span>
         <span class="iconfont iconxingbienan span2" v-else></span>
         <span class="span1">{{ info.nickname }}</span>
         <p>{{ info.create_date | filter }}</p>
@@ -34,6 +31,11 @@
       <my-user @click="$router.push('/emit')">
         <template>设置</template>
       </my-user>
+      <div class="box">
+        <my-user @click="clickfn">
+          <template #title>退出</template>
+        </my-user>
+      </div>
     </div>
   </div>
 </template>
@@ -50,6 +52,20 @@ export default {
     const res = await this.axios.get(`/user/${id}`)
     if (res.data.statusCode === 200) {
       this.info = res.data.data
+    }
+  },
+  methods: {
+    async clickfn() {
+      try {
+        await this.$dialog.confirm({
+          title: '温馨提示',
+          message: '你确定要退出吗？'
+        })
+        this.$router.push('/login')
+        localStorage.removeItem('token')
+        localStorage.removeItem('userId')
+        this.$toast.success('退出成功')
+      } catch {}
     }
   }
 }
@@ -96,5 +112,20 @@ export default {
 .footer {
   margin-top: 15px;
   padding: 0 20px;
+  .box {
+    margin-top: 20px;
+    border: 1px solid red;
+    height: 50px;
+    border-radius: 25px;
+    padding-right: 100px;
+    background-color: red;
+    /deep/.content {
+      text-align: center;
+      color: hotpink;
+    }
+    /deep/.right {
+      opacity: 0;
+    }
+  }
 }
 </style>

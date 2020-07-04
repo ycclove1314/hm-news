@@ -11,7 +11,19 @@ import './less/base.less'
 /* 导入amfe-flexible 适配rem插件 */
 import 'amfe-flexible'
 /* 自动按需导入导入Button按钮插件 */
-import { Button, Field, Form, Toast } from 'vant'
+import {
+  Button,
+  Field,
+  Form,
+  Toast,
+  Dialog,
+  RadioGroup,
+  Radio,
+  Cell,
+  CellGroup,
+  Uploader
+} from 'vant'
+
 Vue.config.productionTip = false
 /* 使用Button插件 */
 Vue.use(Button)
@@ -19,6 +31,12 @@ Vue.use(Button)
 Vue.use(Field)
 Vue.use(Form)
 Vue.use(Toast)
+Vue.use(Dialog)
+Vue.use(Radio)
+Vue.use(RadioGroup)
+Vue.use(Cell)
+Vue.use(CellGroup)
+Vue.use(Uploader)
 /* 把axios 挂载到Vue的原型上 */
 Vue.prototype.axios = axios
 /* 设置默认的基地址 */
