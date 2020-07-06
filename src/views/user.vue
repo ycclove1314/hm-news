@@ -5,7 +5,10 @@
         <img :src="axios.defaults.baseURL + info.head_img" alt />
       </div>
       <div class="content">
-        <span class="iconfont iconxingbienv span3" v-if="info.gender === 0"></span>
+        <span
+          class="iconfont iconxingbienv span3"
+          v-if="info.gender === 0"
+        ></span>
         <span class="iconfont iconxingbienan span2" v-else></span>
         <span class="span1">{{ info.nickname }}</span>
         <p>{{ info.create_date | filter }}</p>
@@ -15,12 +18,12 @@
       </div>
     </div>
     <div class="footer">
-      <my-user>
+      <my-user @click="$router.push('/follows')">
         <template>我的关注</template>
         <!--#title是v-slot的简写-->
         <template #title>关注的用户</template>
       </my-user>
-      <my-user>
+      <my-user @click="$router.push('/follow-up')">
         <template>我的跟帖</template>
         <template #title>跟帖/回复</template>
       </my-user>
@@ -33,7 +36,7 @@
       </my-user>
       <div class="box">
         <my-user @click="clickfn">
-          <template #title>退出</template>
+          <template #title>退出登录</template>
         </my-user>
       </div>
     </div>
@@ -78,6 +81,7 @@ export default {
   align-items: center;
   padding: 0 20px;
   display: flex;
+  font-size: 14px;
   .left {
     width: 75px;
     height: 75px;
@@ -111,6 +115,7 @@ export default {
 }
 .footer {
   margin-top: 15px;
+  font-size: 14px;
   padding: 0 20px;
   .box {
     margin-top: 20px;

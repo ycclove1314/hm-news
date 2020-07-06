@@ -6,6 +6,8 @@ import User from '../views/regiset.vue'
 /* 这导入的是个人中心页 */
 import Regiset from '../views/user.vue'
 import Emit from '../views/edit.vue'
+import Fllows from '../views/follows.vue'
+import followup from '../views/follow-up.vue'
 Vue.use(VueRouter)
 const routerPush = VueRouter.prototype.push
 VueRouter.prototype.push = function push(location) {
@@ -17,7 +19,9 @@ const router = new VueRouter({
     { path: '/login', name: 'login', component: Login },
     { path: '/user', name: 'user', component: User },
     { path: '/regiset', name: 'regiset', component: Regiset },
-    { path: '/emit', name: 'emit', component: Emit }
+    { path: '/emit', name: 'emit', component: Emit },
+    { path: '/follows', component: Fllows },
+    { path: '/follow-up', component: followup }
   ]
 })
 

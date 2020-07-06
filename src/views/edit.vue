@@ -16,21 +16,36 @@
       </my-user>
       <my-user @click="showgender">
         <template>性别</template>
-        <template #title>{{info.gender===0 ? '女':'男'}}</template>
+        <template #title>{{ info.gender === 0 ? '女' : '男' }}</template>
       </my-user>
     </div>
     <!-- 修改昵称弹出框 -->
-    <van-dialog v-model="show" title="修改昵称" show-cancel-button @confirm="updatenickname">
+    <van-dialog
+      v-model="show"
+      title="修改昵称"
+      show-cancel-button
+      @confirm="updatenickname"
+    >
       <van-field v-model="nickname" placeholder="请输入昵称" />
     </van-dialog>
 
     <!-- 修改密码弹出框 -->
-    <van-dialog v-model="password" title="修改密码" show-cancel-button @confirm="updatepassword">
+    <van-dialog
+      v-model="password"
+      title="修改密码"
+      show-cancel-button
+      @confirm="updatepassword"
+    >
       <van-field v-model="pwd" placeholder="请输入密码" />
     </van-dialog>
 
     <!-- 修改性别弹出框 -->
-    <van-dialog v-model="updategender" title="修改性别" show-cancel-button @confirm="updateDen">
+    <van-dialog
+      v-model="updategender"
+      title="修改性别"
+      show-cancel-button
+      @confirm="updateDen"
+    >
       <van-radio-group v-model="gender">
         <van-cell-group>
           <van-cell title="男" clickable @click="gender = 1">
@@ -39,7 +54,7 @@
               <van-radio :name="1" />
             </template>
           </van-cell>
-          <van-cell title="女" clickable @click="gender= 0">
+          <van-cell title="女" clickable @click="gender = 0">
             <template #right-icon>
               <van-radio :name="0" />
             </template>
@@ -47,10 +62,24 @@
         </van-cell-group>
       </van-radio-group>
     </van-dialog>
+    <div class="mask" v-show="ismask">
+      <vueCropper
+        ref="cropper"
+        :img="img"
+        :autoCrop="true"
+        autoCropWidth="160"
+        autoCropHeight="160"
+        :fixed="true"
+        :fixedNumber="[1, 1]"
+      ></vueCropper>
+      <van-button type="warning" @click="cel">裁剪</van-button>
+      <van-button type="danger" @click="cancel">取消</van-button>
+    </div>
   </div>
 </template>
 
 <script>
+import { VueCropper } from 'vue-cropper'
 export default {
   data() {
     return {
@@ -61,11 +90,15 @@ export default {
       pwd: '',
       updategender: false,
       gender: 1,
-      xi: ''
+      ismask: false,
+      img: ''
     }
   },
   created() {
     this.getAll()
+  },
+  components: {
+    VueCropper
   },
   methods: {
     /* 点击昵称框 让 弹出框显示 和数据回显 */
@@ -122,14 +155,31 @@ export default {
     updateDen() {
       this.getInfo({ gender: this.gender })
     },
-    async afterRead(file) {
+    afterRead(file) {
       // 此时可以自行将文件上传至服务器
-      const data = new FormData()
-      data.append('file', file.file)
-      const res = await this.axios.post('/upload', data)
-      if (res.data.statusCode === 200) {
-        this.getInfo({ head_img: res.data.data.url })
-      }
+      /*  选中图片之后让 裁剪框显示出来 */
+      this.ismask = true
+      /* 获取选中文件的地址 赋值给img */
+      this.img = file.content
+    },
+    /* 点击取消按钮隐藏裁剪框 */
+    cancel() {
+      this.ismask = false
+    },
+    cel() {
+      this.$refs.cropper.getCropBlob(async data => {
+        /* new 一个二进制上传文件 */
+        const fb = new FormData()
+        /* fb.append 追加要上传的图片  data是裁剪好的照片文件 */
+        fb.append('file', data)
+        const res = await this.axios.post('/upload', fb)
+        if (res.data.statusCode === 200) {
+          /* 发送ajax请求 修改照片 */
+          this.getInfo({ head_img: res.data.data.url })
+          /* 照片修改好之后隐藏裁剪框 */
+          this.ismask = false
+        }
+      })
     }
   }
 }
@@ -158,5 +208,27 @@ export default {
 }
 .footer {
   padding: 0 20px;
+  font-size: 14px;
+}
+.mask {
+  width: 300px;
+  height: 300px;
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  .van-button {
+    width: 60px;
+    height: 30px;
+    position: fixed;
+  }
+  .van-button:last-child {
+    left: 0;
+    bottom: 0;
+  }
+  .van-button:nth-child(2) {
+    right: 0;
+    bottom: 0;
+  }
 }
 </style>

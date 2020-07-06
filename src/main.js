@@ -21,7 +21,8 @@ import {
   Radio,
   Cell,
   CellGroup,
-  Uploader
+  Uploader,
+  List
 } from 'vant'
 
 Vue.config.productionTip = false
@@ -37,6 +38,7 @@ Vue.use(RadioGroup)
 Vue.use(Cell)
 Vue.use(CellGroup)
 Vue.use(Uploader)
+Vue.use(List)
 /* 把axios 挂载到Vue的原型上 */
 Vue.prototype.axios = axios
 /* 设置默认的基地址 */

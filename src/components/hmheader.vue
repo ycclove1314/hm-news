@@ -20,6 +20,7 @@ export default {}
   line-height: 40px;
   background-color: red;
   display: flex;
+  font-size: 16px;
   .back {
     width: 40px;
     text-align: center;
