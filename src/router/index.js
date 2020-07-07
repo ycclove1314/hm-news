@@ -8,6 +8,7 @@ import Regiset from '../views/user.vue'
 import Emit from '../views/edit.vue'
 import Fllows from '../views/follows.vue'
 import followup from '../views/follow-up.vue'
+import favorite from '../views/favorite.vue'
 Vue.use(VueRouter)
 const routerPush = VueRouter.prototype.push
 VueRouter.prototype.push = function push(location) {
@@ -21,7 +22,8 @@ const router = new VueRouter({
     { path: '/regiset', name: 'regiset', component: Regiset },
     { path: '/emit', name: 'emit', component: Emit },
     { path: '/follows', component: Fllows },
-    { path: '/follow-up', component: followup }
+    { path: '/follow-up', component: followup },
+    { path: '/favorite', component: favorite }
   ]
 })
 

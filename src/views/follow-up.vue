@@ -67,7 +67,7 @@ export default {
       setTimeout(() => {
         this.pageIndex++
         this.getAll()
-      }, 2000)
+      }, 1500)
     }
   }
 }

@@ -67,6 +67,13 @@ axios.interceptors.response.use(function(res) {
   return res
 })
 
+Vue.prototype.url = function(url) {
+  if (url.startsWith('http')) {
+    return url
+  } else {
+    return axios.defaults.baseURL + url
+  }
+}
 /* 公共头部组件 */
 Vue.component('my-header', Myheader)
 Vue.component('my-login', Mylogin)
