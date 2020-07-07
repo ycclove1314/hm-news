@@ -41,31 +41,33 @@ export default {
       finished: false
     }
   },
-  async created() {
-    const res = await this.axios.get('/user_comments', {
-      params: {
-        pageIndex: this.pageIndex,
-        pageSize: this.pageSize
-      }
-    })
-    if (res.data.statusCode === 200) {
-      this.list = res.data.data
-    }
+  created() {
+    this.getAll()
   },
   methods: {
-    async onLoad() {
+    async getAll() {
       const res = await this.axios.get('/user_comments', {
         params: {
-          pageIndex: (this.pageIndex = 2),
+          pageIndex: this.pageIndex,
           pageSize: this.pageSize
         }
       })
       if (res.data.statusCode === 200) {
-        const arr = res.data.data
-        for (let i = 0; i < arr.length; i++) {
-          this.list.push(arr[i])
+        /* 展开运算符 把两个数组和在一起 在赋值给list */
+        this.list = [...this.list, ...res.data.data]
+        this.loading = false
+        /* 判断数组的长度 小于 每一页获取的数据 就代表数据已经获取完了 */
+        if (res.data.data.length < this.pageIndex) {
+          this.finished = true
         }
       }
+    },
+    onLoad() {
+      /* 每次延迟两秒在发送ajax请求 事件触发让 页面自动 + 1   */
+      setTimeout(() => {
+        this.pageIndex++
+        this.getAll()
+      }, 2000)
     }
   }
 }
