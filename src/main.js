@@ -4,6 +4,7 @@ import router from './router/index'
 import Myheader from './components/hmheader.vue'
 import Mylogin from './components/hmlogin.vue'
 import MyUser from './components/hmUser.vue'
+import Hmpost from './components/hmpost.vue'
 import axios from 'axios'
 import moment from 'moment'
 import './less/iconfont.less'
@@ -22,7 +23,9 @@ import {
   Cell,
   CellGroup,
   Uploader,
-  List
+  List,
+  Tab,
+  Tabs
 } from 'vant'
 
 Vue.config.productionTip = false
@@ -39,6 +42,8 @@ Vue.use(Cell)
 Vue.use(CellGroup)
 Vue.use(Uploader)
 Vue.use(List)
+Vue.use(Tab)
+Vue.use(Tabs)
 /* 把axios 挂载到Vue的原型上 */
 Vue.prototype.axios = axios
 /* 设置默认的基地址 */
@@ -78,6 +83,7 @@ Vue.prototype.url = function(url) {
 Vue.component('my-header', Myheader)
 Vue.component('my-login', Mylogin)
 Vue.component('my-user', MyUser)
+Vue.component('hm-post', Hmpost)
 /* 使用过滤器 */
 Vue.filter('filter', function(input) {
   return moment(input).format('YYYY-MM-DD')

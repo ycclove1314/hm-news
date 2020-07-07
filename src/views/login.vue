@@ -80,7 +80,7 @@ export default {
         /* 存储登录的项个人的详情的id */
         localStorage.setItem('userId', res.data.data.user.id)
         /* 登录成功跳转到个人中心 */
-        this.$router.push('/regiset')
+        this.$router.push('/')
       } else {
         this.$toast.success(res.data.message)
       }

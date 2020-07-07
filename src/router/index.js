@@ -9,6 +9,7 @@ import Emit from '../views/edit.vue'
 import Fllows from '../views/follows.vue'
 import followup from '../views/follow-up.vue'
 import favorite from '../views/favorite.vue'
+import Home from '../views/home.vue'
 Vue.use(VueRouter)
 const routerPush = VueRouter.prototype.push
 VueRouter.prototype.push = function push(location) {
@@ -16,14 +17,15 @@ VueRouter.prototype.push = function push(location) {
 }
 const router = new VueRouter({
   routes: [
-    { path: '/', redirect: '/login' },
+    { path: '/', redirect: '/home' },
     { path: '/login', name: 'login', component: Login },
     { path: '/user', name: 'user', component: User },
     { path: '/regiset', name: 'regiset', component: Regiset },
     { path: '/emit', name: 'emit', component: Emit },
     { path: '/follows', component: Fllows },
     { path: '/follow-up', component: followup },
-    { path: '/favorite', component: favorite }
+    { path: '/favorite', component: favorite },
+    { path: '/home', name: 'home', component: Home }
   ]
 })
 
