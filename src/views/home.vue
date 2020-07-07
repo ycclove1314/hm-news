@@ -65,6 +65,7 @@ export default {
       }
     }
   },
+  /* 监听器 监听active数据的变化 如果变化了 就发送对象的id的ajax请求 */
   watch: {
     active(value) {
       //   console.log(value)
