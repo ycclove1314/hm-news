@@ -25,7 +25,8 @@ import {
   Uploader,
   List,
   Tab,
-  Tabs
+  Tabs,
+  PullRefresh
 } from 'vant'
 
 Vue.config.productionTip = false
@@ -44,6 +45,7 @@ Vue.use(Uploader)
 Vue.use(List)
 Vue.use(Tab)
 Vue.use(Tabs)
+Vue.use(PullRefresh)
 /* 把axios 挂载到Vue的原型上 */
 Vue.prototype.axios = axios
 /* 设置默认的基地址 */

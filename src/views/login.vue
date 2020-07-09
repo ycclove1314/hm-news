@@ -66,6 +66,9 @@ export default {
     /* this.$route.params 获取路由传过来的参数 */
     this.username = this.$route.params.username
     this.password = this.$route.params.password
+    if (this.$route.query.back) {
+      localStorage.setItem('b', this.$route.query.id)
+    }
   },
   methods: {
     async onSubmit() {
@@ -73,14 +76,21 @@ export default {
         username: this.username,
         password: this.password
       })
-
       if (res.data.statusCode === 200) {
         this.$toast.success(res.data.message)
         localStorage.setItem('token', res.data.data.token)
         /* 存储登录的项个人的详情的id */
         localStorage.setItem('userId', res.data.data.user.id)
+
         /* 登录成功跳转到个人中心 */
-        this.$router.push('/')
+        const b = localStorage.getItem('b')
+        if (this.$route.query.back) {
+          this.$router.back()
+        } else if (this.$route.params.regiset === true) {
+          this.$router.push(`/datais/${b}`)
+        } else {
+          this.$router.push('/regiset')
+        }
       } else {
         this.$toast.success(res.data.message)
       }

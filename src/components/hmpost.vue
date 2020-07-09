@@ -1,6 +1,19 @@
 <template>
-  <div class="list">
-    <div class="item" v-if="post.cover.length < 3">
+  <div class="list" @click="$router.push(`/datais/${post.id}`)">
+    <div class="videoplus" v-if="post.type === 2">
+      <div class="title">
+        <p>{{ post.title }}</p>
+      </div>
+      <div class="video">
+        <img :src="url(post.cover[0].url)" alt="" />
+        <span class="iconfont iconshipin"></span>
+      </div>
+      <div class="footersed">
+        <span>{{ post.user.nickname }}</span>
+        <span>{{ post.comment_length }}</span>
+      </div>
+    </div>
+    <div class="item" v-else-if="post.cover.length < 3">
       <div class="left">
         <p>{{ post.title }}</p>
         <span>{{ post.user.nickname }}</span>
@@ -13,12 +26,16 @@
 
     <div class="footer" v-else>
       <div class="title">
-        <p>亚马逊雨林为何燃烧？除了新总统“急功近利”的开发，国际资本才是真凶</p>
+        <p>{{ post.title }}</p>
       </div>
       <div class="right">
         <img :src="url(post.cover[0].url)" alt="" />
         <img :src="url(post.cover[1].url)" alt="" />
         <img :src="url(post.cover[2].url)" alt="" />
+      </div>
+      <div class="footersed">
+        <span>{{ post.user.nickname }}</span>
+        <span>{{ post.comment_length }}</span>
       </div>
     </div>
   </div>
@@ -35,6 +52,42 @@ export default {
 <style lang="less" scoped>
 .list {
   margin-top: 30px;
+  .videoplus {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    .video {
+      position: relative;
+      img {
+        width: 340px;
+        height: 170px;
+        object-fit: cover;
+      }
+      span {
+        position: absolute;
+        width: 46px;
+        height: 46px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 25px;
+        color: #fff;
+        line-height: 46px;
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+      }
+    }
+    .footersed {
+      span {
+        font-size: 14px;
+        color: #999;
+        margin-right: 10px;
+      }
+    }
+    .title {
+      font-size: 16px;
+    }
+  }
   .item {
     display: flex;
     font-size: 14px;
@@ -63,6 +116,8 @@ export default {
   .footer {
     .title {
       font-size: 14px;
+      border-bottom: 1px solid #ccc;
+      padding: 10px;
     }
     .right {
       display: flex;
@@ -70,6 +125,13 @@ export default {
         width: 33.33333%;
         height: 75px;
         object-fit: cover;
+      }
+    }
+    .footersed {
+      span {
+        font-size: 14px;
+        color: #999;
+        margin-right: 10px;
       }
     }
   }

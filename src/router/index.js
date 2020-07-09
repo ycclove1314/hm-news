@@ -10,6 +10,7 @@ import Fllows from '../views/follows.vue'
 import followup from '../views/follow-up.vue'
 import favorite from '../views/favorite.vue'
 import Home from '../views/home.vue'
+import datais from '../views/datais.vue'
 Vue.use(VueRouter)
 const routerPush = VueRouter.prototype.push
 VueRouter.prototype.push = function push(location) {
@@ -25,7 +26,8 @@ const router = new VueRouter({
     { path: '/follows', component: Fllows },
     { path: '/follow-up', component: followup },
     { path: '/favorite', component: favorite },
-    { path: '/home', name: 'home', component: Home }
+    { path: '/home', name: 'home', component: Home },
+    { path: '/datais/:id', component: datais }
   ]
 })
 

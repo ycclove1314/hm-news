@@ -24,7 +24,12 @@
       />
       <div class="btn"></div>
       <div style="margin: 16px;">
-        <van-button round block type="info" native-type="submit"
+        <van-button
+          round
+          block
+          type="info"
+          native-type="submit"
+          style="background-color:red"
           >立即注册</van-button
         >
       </div>
@@ -79,6 +84,7 @@ export default {
         this.$router.push({
           name: 'login',
           params: {
+            regiset: true,
             username: this.username,
             password: this.password
           }
