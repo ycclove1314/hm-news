@@ -1,19 +1,19 @@
 <template>
   <div>
-    <!-- v-if 判断 有些评论不一定要parent -->
-    <hmfollows :comment="comment.parent" v-if="comment.parent"></hmfollows>
     <div class="comment-up">
       <div class="comment">
         <div class="left">
-          <img :src="axios.defaults.baseURL+ comment.user.head_img" alt />
+          <img :src="axios.defaults.baseURL + comment.user.head_img" alt />
         </div>
         <div class="center">
-          <span>{{comment.user.nickname}}</span>
-          <p>{{comment.create_date | time}}</p>
+          <span>{{ comment.user.nickname }}</span>
+          <p>{{ comment.create_date | time }}</p>
         </div>
         <div class="right">回复</div>
       </div>
-      <p class="content">{{comment.content}}</p>
+      <!-- v-if 判断 有些评论不一定要parent -->
+      <hmfollows :comment="comment.parent" v-if="comment.parent"></hmfollows>
+      <p class="content">{{ comment.content }}</p>
     </div>
   </div>
 </template>
