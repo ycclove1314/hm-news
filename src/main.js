@@ -5,6 +5,7 @@ import Myheader from './components/hmheader.vue'
 import Mylogin from './components/hmlogin.vue'
 import MyUser from './components/hmUser.vue'
 import Hmpost from './components/hmpost.vue'
+import Hmcomment from './components/hmcomment.vue'
 import axios from 'axios'
 import moment from 'moment'
 import './less/iconfont.less'
@@ -86,9 +87,15 @@ Vue.component('my-header', Myheader)
 Vue.component('my-login', Mylogin)
 Vue.component('my-user', MyUser)
 Vue.component('hm-post', Hmpost)
+Vue.component('hm-Hmcomment', Hmcomment)
+/* 定义了一个全局的中文语言 */
+moment.locale('zh-CN')
 /* 使用过滤器 */
 Vue.filter('filter', function(input) {
   return moment(input).format('YYYY-MM-DD')
+})
+Vue.filter('time', function(input) {
+  return moment(input).fromNow()
 })
 new Vue({
   render: h => h(App),
