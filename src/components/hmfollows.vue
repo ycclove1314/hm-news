@@ -5,16 +5,18 @@
     <div class="hmfollowsplus">
       <div class="hmfollows">
         <div class="left">
-          <span>{{getfollow(1, comment)}}楼:</span>
-          <span>{{comment.user.nickname}}</span>
+          <span>{{ getfollow(1, comment) }}楼:</span>
+          <span>{{ comment.user.nickname }}</span>
         </div>
         <div class="center">
-          <p>{{comment.create_date | time}}</p>
+          <p>{{ comment.create_date | time }}</p>
         </div>
-        <div class="right">回复</div>
+        <div class="right" @click="replay(comment.user.nickname, comment.id)">
+          回复
+        </div>
       </div>
       <div class="content">
-        <p>{{comment.content}}</p>
+        <p>{{ comment.content }}</p>
       </div>
     </div>
   </div>
@@ -36,6 +38,9 @@ export default {
       } else {
         return num
       }
+    },
+    replay(name, id) {
+      this.bus.$emit('replay', name, id)
     }
   }
 }
@@ -65,5 +70,6 @@ export default {
 .content {
   margin: 15px 0;
   font-size: 16px;
+  word-wrap: break-word;
 }
 </style>

@@ -8,7 +8,9 @@
         <span class="iconfont iconnew"></span>
       </div>
       <div class="right">
-        <span v-if="info.has_follow" class="span" @click="unfollows">已关注</span>
+        <span v-if="info.has_follow" class="span" @click="unfollows"
+          >已关注</span
+        >
         <span v-else @click="follows">关注</span>
       </div>
     </div>
@@ -37,15 +39,34 @@
       <div class="title">
         <h3>精彩跟帖</h3>
       </div>
-      <hm-Hmcomment v-for="item in list" :key="item.id" :comment="item"></hm-Hmcomment>
+      <hm-Hmcomment
+        v-for="item in list"
+        :key="item.id"
+        :comment="item"
+      ></hm-Hmcomment>
     </div>
     <div class="footer">
-      <input type="text" placeholder="写跟帖" />
-      <div class="box">
-        <span class="iconfont iconpinglun-"></span>
-        <span class="iconfont iconshoucang" :class="{ active: info.has_star }" @click="start"></span>
-        <span class="iconfont iconfenxiang"></span>
-        <div class="box1">{{ info.comment_length }}</div>
+      <div class="input" v-if="istextarea">
+        <input type="text" placeholder="写跟帖" @focus="focus" />
+        <div class="box">
+          <span class="iconfont iconpinglun-"></span>
+          <span
+            class="iconfont iconshoucang"
+            :class="{ active: info.has_star }"
+            @click="start"
+          ></span>
+          <span class="iconfont iconfenxiang"></span>
+          <div class="box1">{{ info.comment_length }}</div>
+        </div>
+      </div>
+      <div class="textarea" v-else>
+        <textarea
+          :placeholder="'回复:@' + replayName"
+          @blur="blur"
+          ref="textarea"
+          v-model="content"
+        ></textarea>
+        <span @click="send">发送</span>
       </div>
     </div>
   </div>
@@ -58,12 +79,26 @@ export default {
       info: {
         user: {}
       },
-      list: []
+      list: [],
+      istextarea: true,
+      content: '',
+      replayName: '',
+      replayId: ''
     }
   },
   created() {
     this.getAll()
     this.Comment()
+  },
+  mounted() {
+    this.bus.$on('replay', (name, id) => {
+      this.replayName = name
+      this.replayId = id
+      this.istextarea = false
+      this.$nextTick().then(() => {
+        this.$refs.textarea.focus()
+      })
+    })
   },
   methods: {
     /* 进入页面获取文章详情 */
@@ -80,7 +115,6 @@ export default {
       const res = await this.axios.get(`/post_comment/${this.$route.params.id}`)
       if (res.data.statusCode === 200) {
         this.list = res.data.data
-        console.log(this.list)
       }
     },
     /* 给关注按钮注册的事件 */
@@ -172,6 +206,38 @@ export default {
           this.getAll()
         }
       } catch {}
+    },
+    /* 注册获取焦点事件 */
+    async focus() {
+      this.istextarea = false
+      await this.$nextTick()
+      this.$refs.textarea.focus()
+    },
+    /* 注册失去焦点事件 */
+    blur() {
+      /* 如果没有内容才为true */
+      if (!this.content) {
+        this.istextarea = true
+        this.replayName = ''
+      }
+    },
+    async send() {
+      const res = await this.axios.post(`/post_comment/${this.info.id}`, {
+        content: this.content,
+        /* 是当前评论的id */
+        parent_id: this.replayId
+      })
+      if (res.data.statusCode === 200) {
+        this.$toast.success(res.data.message)
+        this.getAll()
+        this.Comment()
+        this.istextarea = true
+        this.content = ''
+        /* 让name为空 这样点input的框 就不会弹出之前要评论的人 */
+        this.replayName = ''
+        /* 让id为空 */
+        this.replayId = ''
+      }
     }
   }
 }
@@ -278,44 +344,66 @@ export default {
   .footer {
     position: fixed;
     bottom: 0;
-    height: 50px;
-
     background-color: #fff;
     width: 100%;
     padding: 10px 20px;
-    display: flex;
     justify-content: space-between;
-
-    input {
-      width: 180px;
-      height: 30px;
-      background-color: #ddd;
-      border: none;
-      border-radius: 15px;
-      font-size: 12px;
-      padding-left: 10px;
-    }
-    .box {
-      position: relative;
-      span {
-        font-size: 23px;
-        margin: 0 12px;
-      }
-      .box1 {
-        position: absolute;
-        top: -8px;
-        left: 27px;
-        width: 30px;
-        height: 15px;
-        border-radius: 7.5px;
-        background-color: red;
+    .input {
+      display: flex;
+      input {
+        width: 180px;
+        height: 30px;
+        background-color: #ddd;
+        border: none;
+        border-radius: 15px;
         font-size: 12px;
-        text-align: center;
-        color: #fff;
+        padding-left: 10px;
       }
-      .active {
-        color: red;
-        font-weight: 700;
+      .box {
+        position: relative;
+        span {
+          font-size: 23px;
+          margin: 0 12px;
+        }
+        .box1 {
+          position: absolute;
+          top: -8px;
+          left: 27px;
+          width: 30px;
+          height: 15px;
+          border-radius: 7.5px;
+          background-color: red;
+          font-size: 12px;
+          text-align: center;
+          color: #fff;
+        }
+        .active {
+          color: red;
+          font-weight: 700;
+        }
+      }
+    }
+    .textarea {
+      textarea {
+        background-color: #ddd;
+        width: 260px;
+        height: 90px;
+        border-radius: 10px;
+        padding: 10px;
+        font-size: 16px;
+        color: #999;
+      }
+      span {
+        font-size: 14px;
+        width: 60px;
+        height: 30px;
+        display: inline-block;
+        margin-left: 10px;
+        background-color: red;
+        text-align: center;
+        line-height: 30px;
+        border-radius: 15px;
+        color: #fff;
       }
     }
   }

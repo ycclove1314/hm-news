@@ -9,7 +9,9 @@
           <span>{{ comment.user.nickname }}</span>
           <p>{{ comment.create_date | time }}</p>
         </div>
-        <div class="right">回复</div>
+        <div class="right" @click="replay(comment.user.nickname, comment.id)">
+          回复
+        </div>
       </div>
       <!-- v-if 判断 有些评论不一定要parent -->
       <hmfollows :comment="comment.parent" v-if="comment.parent"></hmfollows>
@@ -27,6 +29,12 @@ export default {
   },
   props: {
     comment: Object
+  },
+  methods: {
+    replay(name, id) {
+      /* id是每一个评论的id */
+      this.bus.$emit('replay', name, id)
+    }
   }
 }
 </script>
@@ -63,5 +71,6 @@ export default {
 .content {
   font-size: 16px;
   margin: 15px 0;
+  word-wrap: break-word;
 }
 </style>

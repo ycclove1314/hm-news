@@ -97,6 +97,11 @@ Vue.filter('filter', function(input) {
 Vue.filter('time', function(input) {
   return moment(input).fromNow()
 })
+/* 创建一个事件中心 也就是公交车 */
+const bus = new Vue()
+/* 挂载到vue的原型上用this 调用 */
+Vue.prototype.bus = bus
+
 new Vue({
   render: h => h(App),
   router

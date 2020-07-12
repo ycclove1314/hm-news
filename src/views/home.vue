@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <div class="header">
+    <div class="header" @click="$router.push('/search')">
       <div class="left">
         <span class="iconfont iconnew"></span>
       </div>
@@ -15,6 +15,9 @@
       </div>
     </div>
     <div>
+      <div class="itemlist" @click="$router.push('/ColumnList')">
+        <span class="iconfont iconjiantou1"></span>
+      </div>
       <van-tabs v-model="active" sticky animated swipeable>
         <van-tab :title="item.name" v-for="item in labelList" :key="item.id">
           <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
@@ -40,6 +43,8 @@
 
 <script>
 export default {
+  /* 要缓存的组件要提供name属性 */
+  name: 'home',
   data() {
     return {
       active: 0,
@@ -53,6 +58,13 @@ export default {
     }
   },
   created() {
+    const active = JSON.parse(localStorage.getItem('active'))
+    if (active) {
+      this.labelList = active
+      /* 如果本地有栏目列表 就获取本地的栏目列表的数据 */
+      this.category(this.labelList[0].id)
+      return
+    }
     this.getAll()
   },
   methods: {
@@ -73,6 +85,9 @@ export default {
           pageIndex: this.pageIndex
         }
       })
+      if (this.pageIndex === 1) {
+        this.postList = []
+      }
       if (res.data.statusCode === 200) {
         // this.postList = res.data.data
         // console.log(res)
@@ -83,7 +98,7 @@ export default {
         this.loading = false
         /* 下拉的时候会自动改成true 下拉完成要改成false 可以继续触发 下拉事件 */
         this.refreshing = false
-        if (res.data.data < this.pageSize) {
+        if (res.data.data.length < this.pageSize) {
           this.finished = true
         }
       }
