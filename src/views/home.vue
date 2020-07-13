@@ -1,11 +1,11 @@
 <template>
   <div class="home">
-    <div class="header" @click="$router.push('/search')">
+    <div class="header">
       <div class="left">
         <span class="iconfont iconnew"></span>
       </div>
       <div class="content">
-        <div class="serach">
+        <div class="serach" @click="$router.push('/search')">
           <span class="iconfont iconsearch"></span>
           <span class="span">搜索新闻</span>
         </div>
@@ -15,9 +15,12 @@
       </div>
     </div>
     <div>
-      <div class="itemlist" @click="$router.push('/ColumnList')">
-        <span class="iconfont iconjiantou1"></span>
-      </div>
+      <van-sticky>
+        <div class="xi">
+          <span class="iconfont iconjiantou1" @click="$router.push('/ColumnList')"></span>
+        </div>
+      </van-sticky>
+
       <van-tabs v-model="active" sticky animated swipeable>
         <van-tab :title="item.name" v-for="item in labelList" :key="item.id">
           <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
@@ -28,11 +31,7 @@
               @load="onLoad"
               :immediate-check="false"
             >
-              <hm-post
-                v-for="items in postList"
-                :key="items.id"
-                :post="items"
-              ></hm-post>
+              <hm-post v-for="items in postList" :key="items.id" :post="items"></hm-post>
             </van-list>
           </van-pull-refresh>
         </van-tab>
@@ -146,6 +145,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.home {
+  position: relative;
+}
 .header {
   height: 50px;
   background-color: red;
@@ -208,5 +210,20 @@ export default {
       }
     }
   }
+}
+/deep/ .van-tabs .van-sticky {
+  width: 90%;
+}
+
+.xi {
+  width: 10%;
+  background-color: #fff;
+  position: absolute;
+  right: 0;
+  height: 44px;
+  line-height: 44px;
+  font-size: 25px;
+  text-align: center;
+  z-index: 99999;
 }
 </style>

@@ -27,6 +27,7 @@ import {
   List,
   Tab,
   Tabs,
+  Sticky,
   PullRefresh
 } from 'vant'
 
@@ -47,6 +48,7 @@ Vue.use(List)
 Vue.use(Tab)
 Vue.use(Tabs)
 Vue.use(PullRefresh)
+Vue.use(Sticky)
 /* 把axios 挂载到Vue的原型上 */
 Vue.prototype.axios = axios
 /* 设置默认的基地址 */
